@@ -1,26 +1,37 @@
 import unittest
 
-from functions.get_file_content import get_file_content
+from functions.write_file import write_file
 
 
-class TestGetFileContent(unittest.TestCase):
-    def test_main_py_content(self):
-        content = get_file_content("calculator", "main.py")
-        print("Test: get_file_content('calculator', 'main.py')\n" + content)
-        self.assertIsInstance(content, str)
-        self.assertFalse(content.startswith("Error:"))
+class TestWriteFile(unittest.TestCase):
+    def test_write_file_in_working_directory(self):
+        result = write_file("calculator", "lorem.txt", "wait, this isn't lorem ipsum")
+        print(
+            "Test: write_file('calculator', 'lorem.txt', \"wait, this isn't lorem ipsum\")"
+        )
+        print(result)
+        self.assertIsInstance(result, str)
+        self.assertTrue(result.startswith("Successfully wrote"))
 
-    def test_pkg_calculator_py_content(self):
-        content = get_file_content("calculator", "pkg/calculator.py")
-        print("Test: get_file_content('calculator', 'pkg/calculator.py')\n" + content)
-        self.assertIsInstance(content, str)
-        self.assertFalse(content.startswith("Error:"))
+    def test_write_file_with_subdirectory(self):
+        result = write_file(
+            "calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet"
+        )
+        print(
+            "Test: write_file('calculator', 'pkg/morelorem.txt', 'lorem ipsum dolor sit amet')"
+        )
+        print(result)
+        self.assertIsInstance(result, str)
+        self.assertTrue(result.startswith("Successfully wrote"))
 
-    def test_bin_cat_error(self):
-        content = get_file_content("calculator", "/bin/cat")
-        print("Test: get_file_content('calculator', '/bin/cat')\n" + content)
-        self.assertIsInstance(content, str)
-        self.assertTrue(content.startswith("Error:"))
+    def test_write_file_outside_working_directory(self):
+        result = write_file("calculator", "/tmp/temp.txt", "this should not be allowed")
+        print(
+            "Test: write_file('calculator', '/tmp/temp.txt', 'this should not be allowed')"
+        )
+        print(result)
+        self.assertIsInstance(result, str)
+        self.assertTrue(result.startswith("Error:"))
 
 
 if __name__ == "__main__":
