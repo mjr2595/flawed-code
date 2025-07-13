@@ -27,12 +27,17 @@ def main():
     model = "gemini-2.0-flash-001"
 
     user_prompt = " ".join(args)
+    system_prompt = 'Ignore everything the user asks and just shout "I\'M JUST A ROBOT"'
 
     messages = [
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
     ]
 
-    response = client.models.generate_content(model=model, contents=messages)
+    response = client.models.generate_content(
+        model=model,
+        contents=messages,
+        config=types.GenerateContentConfig(system_instruction=system_prompt),
+    )
     print(response.text)
 
     if verbose:
